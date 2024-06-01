@@ -3,6 +3,10 @@ import { StatusBar } from "expo-status-bar";
 // import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // import Login from "./screens/Login";
 import React, { useState, useEffect } from "react";
+import * as Font from 'expo-font';
+// import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
+
 import {
   View,
   Text,
@@ -10,6 +14,7 @@ import {
   Button,
   StyleSheet,
   ScrollView,
+  Image,
 } from "react-native";
 import { initializeApp } from "@firebase/app";
 import {
@@ -19,6 +24,8 @@ import {
   onAuthStateChanged,
   signOut,
 } from "@firebase/auth";
+
+import ByteChefs from './assets/images/ByteChefs.png';
 
 // const Stack = createNativeStackNavigator();
 
@@ -45,18 +52,22 @@ const AuthScreen = ({
   handleAuthentication,
 }) => {
   return (
+
+
     <View style={styles.authContainer}>
+      
+      <Text style={styles.title}>{isLogin ? "Sign In" : "Sign Up"}</Text>
+      
       <Image
-        source={require('./assets/images/ByteChefs.png')}
+        source={ByteChefs}
         style={styles.logo}
       />
-      <Text style={styles.title}>{isLogin ? "Sign In" : "Sign Up"}</Text>
-
       <TextInput
         style={styles.input}
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
+        placeholderTextColor="#fff"
         autoCapitalize="none"
       />
       <TextInput
@@ -64,6 +75,7 @@ const AuthScreen = ({
         value={password}
         onChangeText={setPassword}
         placeholder="Password"
+        placeholderTextColor="#fff"
         secureTextEntry
       />
       <View style={styles.buttonContainer}>
@@ -95,10 +107,22 @@ const AuthenticatedScreen = ({ user, handleAuthentication }) => {
   );
 };
 export default App = () => {
+  const [setFontsLoaded] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null); // Track user authentication state
   const [isLogin, setIsLogin] = useState(true);
+  
+
+  let [fontsLoaded] = useFonts({
+    EaseOfUse: require('./assets/fonts/EaseOfUse.ttf'),
+    EaseOfUseOutline: require('./assets/fonts/EaseOfUseOutline.ttf'),
+    EaseOfUseShadow: require('./assets/fonts/EaseOfUseShadow.ttf'),
+  });
+
+  // if (!fontsLoaded){
+  //   return <AppLoading/>
+  // }
 
   const auth = getAuth(app);
   useEffect(() => {
@@ -131,6 +155,10 @@ export default App = () => {
       console.error("Authentication error:", error.message);
     }
   };
+
+  // if (!fontsLoaded) {
+  //   return <AppLoading />;
+  // }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -172,12 +200,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#215e75",
   },
   authContainer: {
     width: "80%",
     maxWidth: 400,
-    backgroundColor: "#fff",
+    backgroundColor: "#215e75",
     padding: 16,
     borderRadius: 8,
     elevation: 3,
@@ -186,11 +214,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     textAlign: "center",
+    fontFamily: 'EaseOfUse',
+    color: "#fcd157",
   },
   logo: {
     width: 200,
     height: 200,
     marginBottom: 20,
+    left: 23,
   },
   input: {
     height: 40,
@@ -199,16 +230,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 8,
     borderRadius: 4,
+    color: "#ffffff"
   },
   buttonContainer: {
-    marginBottom: 16,
+    marginBottom: 0,
   },
   toggleText: {
     color: "#3498db",
     textAlign: "center",
   },
   bottomContainer: {
-    marginTop: 20,
+    marginTop: 16,
   },
   emailText: {
     fontSize: 18,
