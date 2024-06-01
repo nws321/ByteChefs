@@ -1,12 +1,14 @@
-import { StatusBar } from "expo-status-bar";
-// import { NavigationContainer } from "@react-navigation/native";
-// import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import Login from "./screens/Login";
-import React, { useState, useEffect } from "react";
-import * as Font from 'expo-font';
+// import { StatusBar } from "expo-status-bar";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Login from "./ByteChefs/app/screens/Login";
+import Authenticated from "./ByteChefs/app/screens/Authenticated";
+import Map from "./ByteChefs/app/screens/Map";
+// import * as Font from 'expo-font';
 // import AppLoading from 'expo-app-loading';
-import { useFonts } from 'expo-font';
 
+import React, { useState, useEffect } from "react";
+import { useFonts } from "expo-font";
 import {
   View,
   Text,
@@ -15,6 +17,7 @@ import {
   StyleSheet,
   ScrollView,
   Image,
+  SafeAreaView,
 } from "react-native";
 import { initializeApp } from "@firebase/app";
 import {
@@ -25,12 +28,7 @@ import {
   signOut,
 } from "@firebase/auth";
 
-import ByteChefs from './assets/images/ByteChefs.png';
-
-// const Stack = createNativeStackNavigator();
-
-// const ByteChefs = () => {};
-
+const Stack = createNativeStackNavigator();
 const firebaseConfig = {
   apiKey: "AIzaSyCuYdRrWgznVm51pN52vXHc9qOXfZBAM64",
   authDomain: "bytechefs-57e7c.firebaseapp.com",
@@ -42,87 +40,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const AuthScreen = ({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  isLogin,
-  setIsLogin,
-  handleAuthentication,
-}) => {
-  return (
-
-
-    <View style={styles.authContainer}>
-      
-      <Text style={styles.title}>{isLogin ? "Sign In" : "Sign Up"}</Text>
-      
-      <Image
-        source={ByteChefs}
-        style={styles.logo}
-      />
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        placeholder="Email"
-        placeholderTextColor="#fff"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        placeholder="Password"
-        placeholderTextColor="#fff"
-        secureTextEntry
-      />
-      <View style={styles.buttonContainer}>
-        <Button
-          title={isLogin ? "Sign In" : "Sign Up"}
-          onPress={handleAuthentication}
-          color="#3498db"
-        />
-      </View>
-
-      <View style={styles.bottomContainer}>
-        <Text style={styles.toggleText} onPress={() => setIsLogin(!isLogin)}>
-          {isLogin
-            ? "Need an account? Sign Up"
-            : "Already have an account? Sign In"}
-        </Text>
-      </View>
-    </View>
-  );
-};
-
-const AuthenticatedScreen = ({ user, handleAuthentication }) => {
-  return (
-    <View style={styles.authContainer}>
-      <Text style={styles.title}>Welcome</Text>
-      <Text style={styles.emailText}>{user.email}</Text>
-      <Button title="Logout" onPress={handleAuthentication} color="#e74c3c" />
-    </View>
-  );
-};
 export default App = () => {
   const [setFontsLoaded] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null); // Track user authentication state
   const [isLogin, setIsLogin] = useState(true);
-  
 
   let [fontsLoaded] = useFonts({
-    EaseOfUse: require('./assets/fonts/EaseOfUse.ttf'),
-    EaseOfUseOutline: require('./assets/fonts/EaseOfUseOutline.ttf'),
-    EaseOfUseShadow: require('./assets/fonts/EaseOfUseShadow.ttf'),
+    EaseOfUse: require("./assets/fonts/EaseOfUse.ttf"),
+    EaseOfUseOutline: require("./assets/fonts/EaseOfUseOutline.ttf"),
+    EaseOfUseShadow: require("./assets/fonts/EaseOfUseShadow.ttf"),
   });
-
-  // if (!fontsLoaded){
-  //   return <AppLoading/>
-  // }
 
   const auth = getAuth(app);
   useEffect(() => {
@@ -156,43 +85,36 @@ export default App = () => {
     }
   };
 
-  // if (!fontsLoaded) {
-  //   return <AppLoading />;
-  // }
-
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {user ? (
-        // Show user's email if user is authenticated
-        <AuthenticatedScreen
-          user={user}
-          handleAuthentication={handleAuthentication}
-        />
-      ) : (
-        // Show sign-in or sign-up form if user is not authenticated
-        <AuthScreen
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          isLogin={isLogin}
-          setIsLogin={setIsLogin}
-          handleAuthentication={handleAuthentication}
-        />
-      )}
-    </ScrollView>
+    <NavigationContainer>
+      <ScrollView contentContainerStyle={styles.container}>
+        {user ? (
+          // Show user's email if user is authenticated
+          <Authenticated
+            user={user}
+            handleAuthentication={handleAuthentication}
+          />
+        ) : (
+          // Show sign-in or sign-up form if user is not authenticated
+          <Login
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            isLogin={isLogin}
+            r
+            setIsLogin={setIsLogin}
+            handleAuthentication={handleAuthentication}
+          />
+        )}
+      </ScrollView>
+      {/* <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Authenticated} />
+        <Stack.Screen name="Map" component={Map} />
+      </Stack.Navigator> */}
+    </NavigationContainer>
   );
 };
-
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator>
-//         <Stack.Screen name="ByteChefs" component={Login} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
 
 const styles = StyleSheet.create({
   container: {
@@ -214,14 +136,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     textAlign: "center",
-    fontFamily: 'EaseOfUse',
+    fontFamily: "EaseOfUse",
     color: "#fcd157",
   },
   logo: {
     width: 200,
     height: 200,
     marginBottom: 20,
-    left: 23,
+    left: 45,
   },
   input: {
     height: 40,
@@ -230,7 +152,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 8,
     borderRadius: 4,
-    color: "#ffffff"
+    color: "#ffffff",
   },
   buttonContainer: {
     marginBottom: 0,
