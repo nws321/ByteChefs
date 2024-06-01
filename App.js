@@ -46,6 +46,10 @@ const AuthScreen = ({
 }) => {
   return (
     <View style={styles.authContainer}>
+      <Image
+        source={require('./assets/images/ByteChefs.png')}
+        style={styles.logo}
+      />
       <Text style={styles.title}>{isLogin ? "Sign In" : "Sign Up"}</Text>
 
       <TextInput
@@ -182,6 +186,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginBottom: 16,
     textAlign: "center",
+  },
+  logo: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
   },
   input: {
     height: 40,
