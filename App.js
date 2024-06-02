@@ -3,6 +3,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./ByteChefs/app/screens/Login";
 import Authenticated from "./ByteChefs/app/screens/Authenticated";
+
+import AppNavigator from './routes';
+import Homepage from './screens/Homepage'; // FOR THE NAVIGATION
+
 import Map from "./ByteChefs/app/screens/Map";
 // import * as Font from 'expo-font';
 // import AppLoading from 'expo-app-loading';
