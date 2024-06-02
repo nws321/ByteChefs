@@ -14,7 +14,6 @@ import {
 } from "react-native";
 
 // import ByteChefs from "../../../assets/images/ByteChefs.png";
-import { useNavigation } from "@react-navigation/native";
 
 export default class Homepage extends React.Component {
     render() {
